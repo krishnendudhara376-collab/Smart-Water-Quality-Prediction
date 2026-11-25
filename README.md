@@ -19,7 +19,7 @@ An end-to-end Machine Learning web application built with **Python, Scikit-learn
 - **Database:** SQLite
 
 ## ⚙️ How to Run Locally
-1. Clone the repository:
+## Create and activate a virtual environment:
    ```bash
    python -m venv venv
    venv\Scripts\activate
@@ -32,7 +32,7 @@ pip install -r requirements.txt
 ```bash
 python train.py
 ```
-## Run Application
+## Run Application :
 
 ```bash
 python app.py
