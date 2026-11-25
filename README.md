@@ -21,7 +21,9 @@ An end-to-end Machine Learning web application built with **Python, Scikit-learn
 ## ⚙️ How to Run Locally
 1. Clone the repository:
    ```bash
-   
+   python -m venv venv
+   venv\Scripts\activate
+``
 ## Installation
 ```bash
 pip install -r requirements.txt
