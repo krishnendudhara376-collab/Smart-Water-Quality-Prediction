@@ -35,5 +35,5 @@ python app.py
 
 ## Author
 Krishnendu Dhara 
-   git clone [https://github.com/krishnen dudhara/Smart_Water_Quality_Prediction.git](https://github.com/KrishnenduDhara/Smart_Water_Quality_Prediction.git)
+   git clone [https://github.com/krishnendudhara/Smart_Water_Quality_Prediction.git](https://github.com/KrishnenduDhara/Smart_Water_Quality_Prediction.git)
    cd Smart_Water_Quality_Prediction
