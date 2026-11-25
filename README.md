@@ -20,11 +20,11 @@ An end-to-end Machine Learning web application built with **Python, Scikit-learn
 
 ## ⚙️ How to Run Locally
 ## Create and activate a virtual environment:
-   ```bash
+ ```bash
    python -m venv venv
    venv\Scripts\activate
-``
-## Installation
+ ```
+## Installation :
 ```bash
 pip install -r requirements.txt
 ```
@@ -33,7 +33,6 @@ pip install -r requirements.txt
 python train.py
 ```
 ## Run Application :
-
 ```bash
 python app.py
 ```
