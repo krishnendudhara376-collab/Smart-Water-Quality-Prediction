@@ -28,7 +28,10 @@ An end-to-end Machine Learning web application built with **Python, Scikit-learn
 ```bash
 pip install -r requirements.txt
 ```
-
+## Train the ML models:
+```bash
+python train.py
+```
 ## Run Application
 
 ```bash
