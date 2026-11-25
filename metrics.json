@@ -1,0 +1,91 @@
+{
+    "best_model": "Random Forest",
+    "total_records": 6720,
+    "potable_count": 4991,
+    "not_potable_count": 1729,
+    "feature_scores": {
+        "ph": 0.2176,
+        "Hardness": 0.0372,
+        "Solids": 0.0674,
+        "Chloramines": 0.046,
+        "Sulfate": 0.0612,
+        "Conductivity": 0.0309,
+        "Organic_carbon": 0.0336,
+        "Trihalomethanes": 0.0305,
+        "Turbidity": 0.0554,
+        "ph_neutral_diff": 0.16,
+        "Solids_Conductivity_ratio": 0.0421,
+        "Chloramines_Sulfate_ratio": 0.0359,
+        "Total_Chemical_Load": 0.0267
+    },
+    "metrics": {
+        "Random Forest": {
+            "Accuracy": 99.78,
+            "Precision": 99.7,
+            "Recall": 100.0,
+            "F1_Score": 99.85,
+            "ROC_AUC": 100.0,
+            "Confusion_Matrix": [
+                [
+                    343,
+                    3
+                ],
+                [
+                    0,
+                    998
+                ]
+            ]
+        },
+        "SVM": {
+            "Accuracy": 91.74,
+            "Precision": 96.93,
+            "Recall": 91.78,
+            "F1_Score": 94.29,
+            "ROC_AUC": 97.61,
+            "Confusion_Matrix": [
+                [
+                    317,
+                    29
+                ],
+                [
+                    82,
+                    916
+                ]
+            ]
+        },
+        "KNN": {
+            "Accuracy": 87.57,
+            "Precision": 86.74,
+            "Recall": 98.3,
+            "F1_Score": 92.16,
+            "ROC_AUC": 94.43,
+            "Confusion_Matrix": [
+                [
+                    196,
+                    150
+                ],
+                [
+                    17,
+                    981
+                ]
+            ]
+        },
+        "Logistic Regression": {
+            "Accuracy": 81.1,
+            "Precision": 91.7,
+            "Recall": 81.96,
+            "F1_Score": 86.56,
+            "ROC_AUC": 88.02,
+            "Confusion_Matrix": [
+                [
+                    272,
+                    74
+                ],
+                [
+                    180,
+                    818
+                ]
+            ]
+        }
+    }
+}

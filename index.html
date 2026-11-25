@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Water Quality Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>💧 Smart Water Quality Prediction (ML Dashboard)</h1>
+        <div>
+            <a href="/" class="active">Dashboard</a>
+            <a href="/history">Prediction History</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Dataset Summary Banner -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Dataset Samples</h3>
+                <p>{{ metadata.total_records }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Potable Samples (1)</h3>
+                <p class="green">{{ metadata.potable_count }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Not Potable Samples (0)</h3>
+                <p class="red">{{ metadata.not_potable_count }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Active Best Model</h3>
+                <p class="blue">{{ metadata.best_model }}</p>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <!-- Input Form -->
+            <div class="card">
+                <h2>Enter Water Quality Parameters</h2>
+                <form method="POST" action="/">
+                    <div class="form-grid">
+                        <div>
+                            <label>pH (0 - 14)</label>
+                            <input type="number" step="any" name="ph" value="{{ input_values.ph if input_values else '7.1' }}" required>
+                        </div>
+                        <div>
+                            <label>Hardness (mg/L)</label>
+                            <input type="number" step="any" name="Hardness" value="{{ input_values.Hardness if input_values else '195.0' }}" required>
+                        </div>
+                        <div>
+                            <label>Solids / TDS (ppm)</label>
+                            <input type="number" step="any" name="Solids" value="{{ input_values.Solids if input_values else '21000.0' }}" required>
+                        </div>
+                        <div>
+                            <label>Chloramines (ppm)</label>
+                            <input type="number" step="any" name="Chloramines" value="{{ input_values.Chloramines if input_values else '7.2' }}" required>
+                        </div>
+                        <div>
+                            <label>Sulfate (mg/L)</label>
+                            <input type="number" step="any" name="Sulfate" value="{{ input_values.Sulfate if input_values else '335.0' }}" required>
+                        </div>
+                        <div>
+                            <label>Conductivity (μS/cm)</label>
+                            <input type="number" step="any" name="Conductivity" value="{{ input_values.Conductivity if input_values else '750.0' }}" required>
+                        </div>
+                        <div>
+                            <label>Organic Carbon (ppm)</label>
+                            <input type="number" step="any" name="Organic_carbon" value="{{ input_values.Organic_carbon if input_values else '14.0' }}" required>
+                        </div>
+                        <div>
+                            <label>Trihalomethanes (μg/L)</label>
+                            <input type="number" step="any" name="Trihalomethanes" value="{{ input_values.Trihalomethanes if input_values else '66.0' }}" required>
+                        </div>
+                        <div>
+                            <label>Turbidity (NTU)</label>
+                            <input type="number" step="any" name="Turbidity" value="{{ input_values.Turbidity if input_values else '3.9' }}" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Predict Water Potability</button>
+                </form>
+
+                {% if prediction is not none %}
+                <div class="result-box {{ 'safe' if prediction == 1 else 'unsafe' }}">
+                    <h3>
+                        {% if prediction == 1 %}
+                            ✅ Result: POTABLE (Safe for Drinking)
+                        {% else %}
+                            ⚠️ Result: NOT POTABLE (Unsafe for Drinking)
+                        {% endif %}
+                    </h3>
+                    <p>Potability Confidence Score: <strong>{{ probability }}%</strong></p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Model Evaluation Chart & Table -->
+            <div class="card">
+                <h2>ML Models Performance Comparison</h2>
+                <canvas id="metricsChart" height="160"></canvas>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Algorithm</th>
+                            <th>Accuracy</th>
+                            <th>Precision</th>
+                            <th>Recall</th>
+                            <th>F1-Score</th>
+                            <th>ROC-AUC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for model_name, m in metadata.metrics.items() %}
+                        <tr class="{{ 'highlight-row' if model_name == metadata.best_model else '' }}">
+                            <td><strong>{{ model_name }}</strong></td>
+                            <td>{{ m.Accuracy }}%</td>
+                            <td>{{ m.Precision }}%</td>
+                            <td>{{ m.Recall }}%</td>
+                            <td>{{ m.F1_Score }}%</td>
+                            <td>{{ m.ROC_AUC }}%</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<script>
+        const rawMetrics = ('{{ metadata.metrics | tojson | safe }}');
+        const metricsData = JSON.parse(rawMetrics);
+        const labels = Object.keys(metricsData);
+        const accuracy = labels.map(k => metricsData[k].Accuracy);
+        const f1 = labels.map(k => metricsData[k].F1_Score);
+        const auc = labels.map(k => metricsData[k].ROC_AUC);
+
+        new Chart(document.getElementById('metricsChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    { label: 'Accuracy (%)', data: accuracy, backgroundColor: '#3b82f6' },
+                    { label: 'F1-Score (%)', data: f1, backgroundColor: '#10b981' },
+                    { label: 'ROC-AUC (%)', data: auc, backgroundColor: '#8b5cf6' }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: { y: { beginAtZero: true, max: 100 } }
+            }
+        });
+    </script>
+</body>
+</html>

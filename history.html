@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediction History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <h1>💧 Smart Water Quality Prediction</h1>
+        <div>
+            <a href="/">Dashboard</a>
+            <a href="/history" class="active">Prediction History</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <h2>Saved Prediction Records (SQLite Database)</h2>
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date & Time</th>
+                            <th>pH</th>
+                            <th>Hardness</th>
+                            <th>Solids</th>
+                            <th>Chloramines</th>
+                            <th>Sulfate</th>
+                            <th>Conductivity</th>
+                            <th>Turbidity</th>
+                            <th>Status</th>
+                            <th>Confidence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in records %}
+                        <tr>
+                            <td>{{ row.id }}</td>
+                            <td>{{ row.timestamp }}</td>
+                            <td>{{ row.ph }}</td>
+                            <td>{{ row.hardness }}</td>
+                            <td>{{ row.solids }}</td>
+                            <td>{{ row.chloramines }}</td>
+                            <td>{{ row.sulfate }}</td>
+                            <td>{{ row.conductivity }}</td>
+                            <td>{{ row.turbidity }}</td>
+                            <td>
+                                {% if row.prediction == 1 %}
+                                    <span class="badge safe">Potable</span>
+                                {% else %}
+                                    <span class="badge unsafe">Not Potable</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ row.probability }}%</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="11" style="text-align:center;">No predictions recorded yet.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
